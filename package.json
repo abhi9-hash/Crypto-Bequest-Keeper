@@ -1,0 +1,27 @@
+{
+  "name": "iss-project",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Repository for bequest keeper using encryption algorithms",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhi9-hash/Iss-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhi9-hash/Iss-project/issues"
+  },
+  "homepage": "https://github.com/abhi9-hash/Iss-project#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.14"
+  }
+}
