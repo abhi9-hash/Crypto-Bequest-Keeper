@@ -1,6 +1,7 @@
 import Express from 'express';
 import Jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import accountRouter from './routes/accountRouter.js';
 import userRouter from './routes/userRouter.js';
 
 const app = Express();
@@ -15,6 +16,7 @@ mongoose.connect( "mongodb+srv://abhinav:abhinav@cluster0.qzukv.mongodb.net/User
   .catch((err)=>console.log(err));
 
 app.use('/users', userRouter);
+app.use('/account', accountRouter);
 app.get('/',(req,res)=>{
     res.send('server has started')
     });

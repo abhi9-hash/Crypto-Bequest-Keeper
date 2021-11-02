@@ -1,7 +1,7 @@
 import express from 'express';
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../utils.js';
+import { generateToken, isAuth } from '../utils.js';
 
 const userRouter = express.Router();
 
@@ -55,17 +55,26 @@ userRouter.post(
   );
 
 userRouter.put(
-    '/edit/:id',
+    '/edit/',
+    isAuth,
     async (req, res) => {
       try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.user.id);
         
         user.firstname = req.body.name || user.name;
         user.email = user.email;
         user.phone = req.body.phone || user.phone;
+        if (req.body.password) {
+          user.password = bcrypt.hashSync(req.body.password, 8);
+        }
 
         const updatedUser = await user.save();
-        res.send(updatedUser);
+        res.send({
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          token: generateToken(updatedUser),
+        });
       } catch {
         res.status(404).send({ message: 'User Doesnot Exist' });
       }

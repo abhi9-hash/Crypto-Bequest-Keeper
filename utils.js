@@ -8,12 +8,26 @@ export const generateToken = (user) => {
       email: user.email,
       phone: user.phone,
     },
-    'somethingsecret',
+    process.env.JWT_SECRET || 'somethingsecret',
     {
       expiresIn: '30d',
     }
   );
 };
+
+export const generateEncrypToken = (req, res, next) => {
+    req.token = jwt.sign(
+      {
+        _id: req.body.userid,
+        text: req.body.text,
+        nominee1: req.body.nominee1,
+        nominee2: req.body.nominee1,
+        nominee3: req.body.nominee1,
+      },
+      req.body.secretkey
+    );
+    next();
+  };
 
 export const isAuth = (req, res, next) => {
   const authorization = req.headers.authorization;
