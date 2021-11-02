@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
+import { generateToken } from '../utils.js';
 
 const userRouter = express.Router();
 
@@ -17,7 +18,12 @@ userRouter.post(
             password: bcrypt.hashSync(req.body.password, 8),
           });
         const savedUser = await createdUser.save();
-        res.send(savedUser);
+        res.send({
+          _id: saveduser._id,
+          name: saveduser.name,
+          email: saveduser.email,
+          token: generateToken(saveduser),
+        });
         } else {
           res.status(400).send({ message: 'User Already Exists' });
         }
@@ -38,7 +44,6 @@ userRouter.post(
             _id: user._id,
             name: user.name,
             email: user.email,
-            isAdmin: user.isAdmin,
             token: generateToken(user),
           });
         }
@@ -55,8 +60,7 @@ userRouter.put(
       try {
         const user = await User.findById(req.params.id);
         
-        user.firstname = req.body.firstname || user.firstname;
-        user.lastname = req.body.lastname || user.lastname;
+        user.firstname = req.body.name || user.name;
         user.email = user.email;
         user.phone = req.body.phone || user.phone;
 
