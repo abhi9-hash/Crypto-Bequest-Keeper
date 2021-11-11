@@ -1,17 +1,17 @@
 import express from 'express';
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
-import { generateEncrypToken, generateToken, isAuth } from '../utils.js';
+import { generateEncrypToken, generateToken, isAuth, getEncrypToken } from '../utils.js';
 import Account from '../models/accountModel.js';
 
 const accountRouter = express.Router();
 
 accountRouter.post(
     '/',
-    generateEncrypToken,
+    [isAuth, generateEncrypToken],
     async (req, res) => {
       try {  
-        const user = User.findById(req.body.userid);
+        const user = User.findById(req.user._id);
         const accdetails = new Account({
             userid: req.body.userid,
             token: req.token
@@ -28,11 +28,11 @@ accountRouter.post(
 
   accountRouter.get(
     '/',
-    isAuth,
+    [isAuth, getEncrypToken],
     async (req, res) => {
       try {  
         jwt.verify(
-          token,
+          req.token,
           req.body.key,
           (err, decode) => {
             if (err) {
@@ -53,27 +53,22 @@ accountRouter.post(
 
 
   // option to save changes for prime members only
-  // accountRouter.put(
-  //   '/edit/',
-  //   isAuth,
-  //   async (req, res) => {
-  //     try {
-  //       const user = await User.findById(req.params.id);
-        
-  //       user.firstname = req.body.name || user.name;
-  //       user.email = user.email;
-  //       user.phone = req.body.phone || user.phone;
-  //       if (req.body.password) {
-  //         user.password = bcrypt.hashSync(req.body.password, 8);
-  //       }
-
-  //       const updatedUser = await user.save();
-  //       res.send(updatedUser);
-  //     } catch {
-  //       res.status(404).send({ message: 'User Doesnot Exist' });
-  //     }
-  //   }
-  // );  
+  accountRouter.put(
+    '/edit/',
+    isAuth,
+    async (req, res) => {
+      try {
+        const user = await User.findById(req.user._id);
+        const account = await Account.findOne({userid:req.user._id})
+        generateEncrypToken();
+        account.token=req.token;
+        const updatedacc = await account.save();
+        res.send({message:"Account info updated!"});
+      } catch {
+        res.status(404).send({ message: 'User/Account Doesnot Exist' });
+      }
+    }
+  );  
 
 
 export default accountRouter;

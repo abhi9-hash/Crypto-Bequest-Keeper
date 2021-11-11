@@ -11,18 +11,20 @@ userRouter.post(
       try {  
         const user = await User.findOne({email:req.body.email});
         if(!user) {
+          const date= new Date();
         const createdUser = new User({
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
             password: bcrypt.hashSync(req.body.password, 8),
+            lastlogin: date
           });
         const savedUser = await createdUser.save();
         res.send({
-          _id: saveduser._id,
-          name: saveduser.name,
-          email: saveduser.email,
-          token: generateToken(saveduser),
+          _id: savedUser._id,
+          name: savedUser.name,
+          email: savedUser.email,
+          token: generateToken(savedUser),
         });
         } else {
           res.status(400).send({ message: 'User Already Exists' });
@@ -40,6 +42,9 @@ userRouter.post(
         const user = await User.findOne({ email: req.body.email });
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
+          const date= new Date();
+          user.lastlogin= date;
+          const updatedUser = await user.save();
           res.send({
             _id: user._id,
             name: user.name,
@@ -59,7 +64,7 @@ userRouter.put(
     isAuth,
     async (req, res) => {
       try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
         
         user.firstname = req.body.name || user.name;
         user.email = user.email;

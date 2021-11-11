@@ -1,6 +1,8 @@
 import Express from 'express';
-import Jwt from 'jsonwebtoken';
+import {init, send} from 'emailjs-com'
+import nodemailer from 'nodemailer'
 import mongoose from 'mongoose';
+import User from './models/userModel.js';
 import accountRouter from './routes/accountRouter.js';
 import userRouter from './routes/userRouter.js';
 
@@ -26,5 +28,36 @@ app.use((err, req, res, next) => {
     });
 app.listen(5000,()=>{
     console.log('running port 5000')
+    setInterval(async()=>{
+        const users=await User.find({});
+        const date= new Date();
+        for(var i=0;i<users.length;i++) {
+            if(date-users[i].lastlogin >2592000000){
+                  let transporter = nodemailer.createTransport({
+                  host: 'smtp.gmail.com',
+                  port: 587,
+                  secure: false,
+                  requireTLS: true,
+                  auth: {
+                      user: 'abhinavvpathakk@gmail.com',
+                      pass: 'xxxxxxxxxx'
+                  }
+              });
+                var mailOptions = {
+                    from: 'abhinavvpathakk@gmail.com',
+                    to: users[i].email,
+                    subject: 'Login inactivity',
+                    text: 'Please kogin!'
+                  };
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
+            }
+        }
+    },86400000)
 });
 

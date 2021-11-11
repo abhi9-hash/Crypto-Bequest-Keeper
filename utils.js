@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import Account from './models/accountModel';
 
 export const generateToken = (user) => {
   return jwt.sign(
@@ -47,5 +48,15 @@ export const isAuth = (req, res, next) => {
     );
   } else {
     res.status(401).send({ message: 'No Token' });
+  }
+}
+
+export const getEncrypToken= async(req,res,next)=>{
+  try{
+  const account=await Account.findOne({userid: req.body.userid})
+  req.token= user.token;
+  next();
+  } catch{
+    res.status(401).send({ message: 'Invalid user' });
   }
 }
