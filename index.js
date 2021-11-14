@@ -13,7 +13,7 @@ const app = Express();
 app.use(Express.json())
 app.use(Express.urlencoded({ extended: true }));
 
-mongoose.connect( "mongodb+srv://abhinav:abhinav@cluster0.qzukv.mongodb.net/UserService?retryWrites=true&w=majority", {
+mongoose.connect( process.env.URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }).then(()=>console.log('DB Connected'))
@@ -42,7 +42,7 @@ app.listen(5000,async()=>{ //process.env.PORT||
                   requireTLS: true,
                   auth: {
                       user: 'abhinavvpathakk@gmail.com',
-                      pass: '8077399393'
+                      pass: process.env.PASS
                   }
               });
                 var mailOptions = {
@@ -69,7 +69,7 @@ app.listen(5000,async()=>{ //process.env.PORT||
                 requireTLS: true,
                 auth: {
                     user: 'abhinavvpathakk@gmail.com',
-                    pass: '8077399393'
+                    pass: process.env.PASS
                 }
             });
               var mailOptions = {
