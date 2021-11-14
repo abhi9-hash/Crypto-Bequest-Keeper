@@ -26,8 +26,6 @@ userRouter.post(
           email: savedUser.email,
           token: generateToken(savedUser),
         });
-        } else {
-          res.status(400).send({ message: 'User Already Exists' });
         }
       } catch {
         res.status(400).send({ message: 'User Already Exists' });

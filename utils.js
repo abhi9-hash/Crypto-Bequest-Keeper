@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import Account from './models/accountModel';
+import Account from './models/accountModel.js';
 
 export const generateToken = (user) => {
   return jwt.sign(
@@ -17,18 +17,25 @@ export const generateToken = (user) => {
 };
 
 export const generateEncrypToken = (req, res, next) => {
+  const key= req.body.secretkey;
+  const payload=  {
+    text: req.headers.text
+  }
     req.token = jwt.sign(
-      {
-        _id: req.body.userid,
-        text: req.body.text,
-        nominee1: req.body.nominee1,
-        nominee2: req.body.nominee1,
-        nominee3: req.body.nominee1,
-      },
-      req.body.secretkey
+     payload,
+     `${req.body.secretkey}`
     );
+    console.log(req.token)
     next();
   };
+
+export const generateEncrypToken2 = (payload, key) => {
+    
+      return jwt.sign(
+       payload,
+       `${key}`
+      );
+    };  
 
 export const isAuth = (req, res, next) => {
   const authorization = req.headers.authorization;
@@ -41,6 +48,7 @@ export const isAuth = (req, res, next) => {
         if (err) {
           res.status(401).send({ message: 'Invalid Token' });
         } else {
+          console.log(decode)
           req.user = decode;
           next();
         }
@@ -53,8 +61,9 @@ export const isAuth = (req, res, next) => {
 
 export const getEncrypToken= async(req,res,next)=>{
   try{
-  const account=await Account.findOne({userid: req.body.userid})
-  req.token= user.token;
+  const account=await Account.findOne({userid: req.user._id})
+  console.log(account)
+  req.token= account.token;
   next();
   } catch{
     res.status(401).send({ message: 'Invalid user' });

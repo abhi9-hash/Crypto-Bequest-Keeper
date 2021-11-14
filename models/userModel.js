@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     filledDetails: { type: Boolean, default: false},
     lastlogin: { type: Date},
+    mailsent: {type: Boolean, default: false},
+    nominee1: {type: String},
+    nominee2: {type: String},
+    nominee3: {type: String}
   },
   {
     timestamps: true,
