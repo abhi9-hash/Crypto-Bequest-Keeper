@@ -17,7 +17,11 @@ userRouter.post(
             email: req.body.email,
             phone: req.body.phone,
             password: bcrypt.hashSync(req.body.password, 8),
-            lastlogin: date
+            lastlogin: date,
+            mailsent: false,
+            nominee1 :req.body.nominee1,
+    	      nominee2: req.body.nominee2,
+    	      nominee3: req.body.nominee3
           });
         const savedUser = await createdUser.save();
         res.send({
@@ -27,8 +31,8 @@ userRouter.post(
           token: generateToken(savedUser),
         });
         }
-      } catch {
-        res.status(400).send({ message: 'User Already Exists' });
+      } catch(err) {
+        res.status(400).send({ message: err+ ' / User Already Exists' });
       }
     }
   );
@@ -42,6 +46,7 @@ userRouter.post(
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const date= new Date();
           user.lastlogin= date;
+          user.mailsent=false;
           const updatedUser = await user.save();
           res.send({
             _id: user._id,

@@ -5,9 +5,11 @@ import mongoose from 'mongoose';
 import User from './models/userModel.js';
 import accountRouter from './routes/accountRouter.js';
 import userRouter from './routes/userRouter.js';
+import dotenv from 'dotenv';
 
+
+dotenv.config();
 const app = Express();
-
 app.use(Express.json())
 app.use(Express.urlencoded({ extended: true }));
 
@@ -26,13 +28,13 @@ app.get('/',(req,res)=>{
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
     });
-app.listen(process.env.PORT||5000,()=>{
+app.listen(5000,async()=>{ //process.env.PORT||
     console.log('running port 5000')
     setInterval(async()=>{
         const users=await User.find({});
         const date= new Date();
         for(var i=0;i<users.length;i++) {
-            if(date-users[i].lastlogin >2592000000){
+            if(date-users[i].lastlogin >40000 && date-users[i].lastlogin <60000){//2592000000  2678000000
                   let transporter = nodemailer.createTransport({
                   host: 'smtp.gmail.com',
                   port: 587,
@@ -40,7 +42,7 @@ app.listen(process.env.PORT||5000,()=>{
                   requireTLS: true,
                   auth: {
                       user: 'abhinavvpathakk@gmail.com',
-                      pass: 'xxxxxxxxxx'
+                      pass: '8077399393'
                   }
               });
                 var mailOptions = {
@@ -57,7 +59,35 @@ app.listen(process.env.PORT||5000,()=>{
                     }
                   });
             }
+             if(date-users[i].lastlogin > 60000 && !users[i].mailsent){//2678000000
+              users[i].mailsent= true;
+              const updateduser= await users[i].save();
+              let transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false,
+                requireTLS: true,
+                auth: {
+                    user: 'abhinavvpathakk@gmail.com',
+                    pass: '8077399393'
+                }
+            });
+              var mailOptions = {
+                  from: 'abhinavvpathakk@gmail.com',
+                  to: users[i].nominee1,
+                  subject: 'Login inactivity',
+                  text: 'Please kogin!'
+                };
+              transporter.sendMail(mailOptions, function(error, info){
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    console.log('Email sent: ' + info.response);
+                  }
+                });
+
+            }
         }
-    },86400000)
+     },10000)//21600000
 });
 

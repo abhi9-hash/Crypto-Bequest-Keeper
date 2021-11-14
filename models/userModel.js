@@ -9,9 +9,9 @@ const userSchema = new mongoose.Schema(
     filledDetails: { type: Boolean, default: false},
     lastlogin: { type: Date},
     mailsent: {type: Boolean, default: false},
-    nominee1: {type: String},
-    nominee2: {type: String},
-    nominee3: {type: String}
+    nominee1: {type: String, required:false},
+    nominee2: {type: String, required:false},
+    nominee3: {type: String, required:false}
   },
   {
     timestamps: true,
