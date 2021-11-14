@@ -28,7 +28,7 @@ app.get('/',(req,res)=>{
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
     });
-app.listen(5000,async()=>{ //process.env.PORT||
+app.listen(process.env.PORT||5000,async()=>{ 
     console.log('running port 5000')
     setInterval(async()=>{
         const users=await User.find({});
