@@ -31,8 +31,12 @@ userRouter.post(
           token: generateToken(savedUser),
         });
         }
+        else{
+          res.status(400).send({ message:' User Already Exists' });
+
+        }
       } catch(err) {
-        res.status(400).send({ message: err+ ' / User Already Exists' });
+        res.status(400).send({ message:' User Already Exists' });
       }
     }
   );
