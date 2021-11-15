@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { generateEncrypToken, generateToken, isAuth, getEncrypToken, generateEncrypToken2 } from '../utils.js';
 import Account from '../models/accountModel.js';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto'
+import CryptoJS from "crypto-js";
 
 const accountRouter = express.Router();
 const algorithm = process.env.ENCRYPTION_ALGORITHM || 'aes256';
@@ -18,12 +18,10 @@ accountRouter.post(
       try {  
         const user = await User.findById(req.user._id);
         console.log(user)
-        var cipher = crypto.createCipheriv(algorithm, req.body.secretkey);
-        var encrypted = cipher.update(req.token, inputEncoding, outputEncoding);
-        encrypted += cipher.final(outputEncoding)
+        var ciphertext = CryptoJS.AES.encrypt(req.token, `${req.body.secretkey}`).toString();
         const accdetails = new Account({
             userid: req.user._id,
-            token: encrypted
+            token: ciphertext
           });
           console.log(accdetails)
         user.filledDetails = true;
@@ -45,11 +43,10 @@ accountRouter.post(
     async (req, res) => {
       try {  
         console.log(req.token)
-        var decipher = crypto.createDecipheriv(algorithm, req.body.secretkey);
-        var decrypted = decipher.update(req.token, outputEncoding, inputEncoding)
-        decrypted += decipher.final(inputEncoding)
+        var bytes  = CryptoJS.AES.decrypt(req.token, `${req.body.secretkey}`);
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
         jwt.verify(
-          decrypted,
+          originalText,
           `${req.body.secretkey}`,
           (err, decode) => {
             if (err) {
@@ -83,10 +80,8 @@ accountRouter.post(
          text: req.headers.text
         }
         var token = generateEncrypToken2(payload, key);
-        var cipher = crypto.createCipheriv(algorithm, req.body.secretkey);
-        var encrypted = cipher.update(token, inputEncoding, outputEncoding);
-        encrypted += cipher.final(outputEncoding);
-        account.token = encrypted;
+        var ciphertext = CryptoJS.AES.encrypt(token, `${req.body.secretkey}`).toString();
+        account.token = ciphertext;
         const updatedacc = await account.save();
         res.send({message:"Account info updated!"});
       } catch {
