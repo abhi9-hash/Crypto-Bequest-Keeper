@@ -45,7 +45,7 @@ accountRouter.post(
     async (req, res) => {
       try {  
         console.log(req.token)
-        var decipher = crypto.createDecipheriv(algorithm, key);
+        var decipher = crypto.createDecipheriv(algorithm, req.body.secretkey);
         var decrypted = decipher.update(req.token, outputEncoding, inputEncoding)
         decrypted += decipher.final(inputEncoding)
         jwt.verify(
@@ -83,7 +83,7 @@ accountRouter.post(
          text: req.headers.text
         }
         var token = generateEncrypToken2(payload, key);
-        var cipher = crypto.createCipheriv(algorithm, req.body.key);
+        var cipher = crypto.createCipheriv(algorithm, req.body.secretkey);
         var encrypted = cipher.update(token, inputEncoding, outputEncoding);
         encrypted += cipher.final(outputEncoding);
         account.token = encrypted;
