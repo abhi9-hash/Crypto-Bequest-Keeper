@@ -4,8 +4,12 @@ import bcrypt from 'bcryptjs';
 import { generateEncrypToken, generateToken, isAuth, getEncrypToken, generateEncrypToken2 } from '../utils.js';
 import Account from '../models/accountModel.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto'
 
 const accountRouter = express.Router();
+const algorithm = process.env.ENCRYPTION_ALGORITHM || 'aes256';
+const inputEncoding = process.env.ENCRYPTION_INPUT_ENCODING || 'utf8';
+const outputEncoding = process.env.ENCRYPTION_OUTPUT_ENCODING || 'hex';
 
 accountRouter.post(
     '/',
@@ -14,9 +18,12 @@ accountRouter.post(
       try {  
         const user = await User.findById(req.user._id);
         console.log(user)
+        var cipher = crypto.createCipheriv(algorithm, req.body.secretkey);
+        var encrypted = cipher.update(req.token, inputEncoding, outputEncoding);
+        encrypted += cipher.final(outputEncoding)
         const accdetails = new Account({
             userid: req.user._id,
-            token: req.token
+            token: encrypted
           });
           console.log(accdetails)
         user.filledDetails = true;
@@ -38,8 +45,11 @@ accountRouter.post(
     async (req, res) => {
       try {  
         console.log(req.token)
+        var decipher = crypto.createDecipheriv(algorithm, key);
+        var decrypted = decipher.update(req.token, outputEncoding, inputEncoding)
+        decrypted += decipher.final(inputEncoding)
         jwt.verify(
-          req.token,
+          decrypted,
           `${req.body.secretkey}`,
           (err, decode) => {
             if (err) {
@@ -72,7 +82,11 @@ accountRouter.post(
         const payload=  {
          text: req.headers.text
         }
-        account.token = generateEncrypToken2(payload, key);
+        var token = generateEncrypToken2(payload, key);
+        var cipher = crypto.createCipheriv(algorithm, req.body.key);
+        var encrypted = cipher.update(token, inputEncoding, outputEncoding);
+        encrypted += cipher.final(outputEncoding);
+        account.token = encrypted;
         const updatedacc = await account.save();
         res.send({message:"Account info updated!"});
       } catch {
