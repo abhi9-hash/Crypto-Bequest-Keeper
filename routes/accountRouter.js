@@ -7,9 +7,6 @@ import jwt from 'jsonwebtoken';
 import CryptoJS from "crypto-js";
 
 const accountRouter = express.Router();
-const algorithm = process.env.ENCRYPTION_ALGORITHM || 'aes256';
-const inputEncoding = process.env.ENCRYPTION_INPUT_ENCODING || 'utf8';
-const outputEncoding = process.env.ENCRYPTION_OUTPUT_ENCODING || 'hex';
 
 accountRouter.post(
     '/',
@@ -42,6 +39,38 @@ accountRouter.post(
     [isAuth, getEncrypToken],
     async (req, res) => {
       try {  
+        console.log(req.token)
+        var bytes  = CryptoJS.AES.decrypt(req.token, `${req.body.secretkey}`);
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
+        jwt.verify(
+          originalText,
+          `${req.body.secretkey}`,
+          (err, decode) => {
+            if (err) {
+              res.status(401).send({ message: err });
+            } else {
+              req.data = decode;
+              console.log(decode)
+              res.status(200).send({
+                text: req.data
+              })
+            }
+          }
+        );
+      } catch {
+        res.status(400).send({ message: 'Cannot get data' });
+      }
+    }
+  );
+
+
+  accountRouter.post(
+    '/nominee',
+    async (req, res) => {
+      try {  
+        const account=await Account.findOne({userid: req.body.userid})
+        console.log(account)
+        req.token= account.token;
         console.log(req.token)
         var bytes  = CryptoJS.AES.decrypt(req.token, `${req.body.secretkey}`);
         var originalText = bytes.toString(CryptoJS.enc.Utf8);

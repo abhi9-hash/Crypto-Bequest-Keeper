@@ -78,7 +78,7 @@ app.listen(process.env.PORT||5000,async()=>{
                   from: 'abhinavvpathakk@gmail.com',
                   to: users[i].nominee1,
                   subject: 'Login inactivity',
-                  text: 'Please kogin!'
+                  text: `Please kogin!. UserId: ${users[i]._id}`
                 };
               transporter.sendMail(mailOptions, function(error, info){
                   if (error) {
