@@ -59,9 +59,12 @@ userRouter.post(
             token: generateToken(user),
           });
         }
+        else{
+          res.status(400).send({ message: 'Wrong Password' }); 
+        }
       }
       else{
-        res.status(400).send({ message: 'Wrong Email/Password' }); 
+        res.status(400).send({ message: 'Wrong Email' }); 
       }
       } catch {
         res.status(400).send({ message: 'Wrong Email/Password' });
