@@ -60,6 +60,9 @@ userRouter.post(
           });
         }
       }
+      else{
+        res.status(400).send({ message: 'Wrong Email/Password' }); 
+      }
       } catch {
         res.status(400).send({ message: 'Wrong Email/Password' });
       }
