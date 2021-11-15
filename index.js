@@ -6,12 +6,14 @@ import User from './models/userModel.js';
 import accountRouter from './routes/accountRouter.js';
 import userRouter from './routes/userRouter.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 
 dotenv.config();
 const app = Express();
 app.use(Express.json())
 app.use(Express.urlencoded({ extended: true }));
+app.use(cors())
 
 mongoose.connect( process.env.URL, {
     useNewUrlParser: true,
@@ -21,7 +23,7 @@ mongoose.connect( process.env.URL, {
 
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
-app.get('/',(req,res)=>{
+app.get('/',(req,res)=>{                       
     res.send('server has started')
     });
     
