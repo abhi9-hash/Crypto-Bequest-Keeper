@@ -108,6 +108,10 @@ accountRouter.post(
         const payload=  {
          text: req.headers.text
         }
+        user.nominee1= req.body.nominee1;
+        user.nominee2= req.body.nominee2;
+        user.nominee3= req.body.nominee3;
+        const newuserdetails = await user.save();
         var token = generateEncrypToken2(payload, key);
         var ciphertext = CryptoJS.AES.encrypt(token, `${req.body.secretkey}`).toString();
         account.token = ciphertext;
