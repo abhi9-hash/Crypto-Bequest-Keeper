@@ -29,7 +29,7 @@ userRouter.post(
           name: savedUser.name,
           email: savedUser.email,
           token: generateToken(savedUser),
-          filledDetails: user.filledDetails
+          filledDetails: savedUser.filledDetails
         });
         }
         else{
