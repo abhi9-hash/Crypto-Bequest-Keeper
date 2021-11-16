@@ -29,6 +29,7 @@ userRouter.post(
           name: savedUser.name,
           email: savedUser.email,
           token: generateToken(savedUser),
+          filledDetails: user.filledDetails
         });
         }
         else{
@@ -57,6 +58,7 @@ userRouter.post(
             name: user.name,
             email: user.email,
             token: generateToken(user),
+            filledDetails: user.filledDetails
           });
         }
         else{
@@ -92,6 +94,7 @@ userRouter.put(
           name: updatedUser.name,
           email: updatedUser.email,
           token: generateToken(updatedUser),
+          filledDetails: user.filledDetails
         });
       } catch {
         res.status(404).send({ message: 'User Doesnot Exist' });
