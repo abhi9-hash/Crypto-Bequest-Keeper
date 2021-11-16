@@ -44,7 +44,7 @@ app.listen(process.env.PORT||5000,async()=>{
                   requireTLS: true,
                   auth: {
                       user: 'abhinavvpathakk@gmail.com',
-                      pass: `${process.env.PASS}`
+                      pass: '8077399393'
                   }
               });
                 var mailOptions = {
@@ -71,7 +71,7 @@ app.listen(process.env.PORT||5000,async()=>{
                 requireTLS: true,
                 auth: {
                     user: 'abhinavvpathakk@gmail.com',
-                    pass: `${process.env.PASS}`
+                    pass: '8077399393'
                 }
             });
               var mailOptions = {
