@@ -29,7 +29,10 @@ userRouter.post(
           name: savedUser.name,
           email: savedUser.email,
           token: generateToken(savedUser),
-          filledDetails: savedUser.filledDetails
+          filledDetails: savedUser.filledDetails,
+          nominee1 :savedUser.nominee1,
+          nominee2: savedUser.nominee2,
+          nominee3: savedUser.nominee3
         });
         }
         else{
@@ -58,7 +61,10 @@ userRouter.post(
             name: user.name,
             email: user.email,
             token: generateToken(user),
-            filledDetails: user.filledDetails
+            filledDetails: user.filledDetails,
+            nominee1 :user.nominee1,
+            nominee2: user.nominee2,
+            nominee3: user.nominee3
           });
         }
         else{
@@ -94,7 +100,7 @@ userRouter.put(
           name: updatedUser.name,
           email: updatedUser.email,
           token: generateToken(updatedUser),
-          filledDetails: user.filledDetails
+          filledDetails: updatedUser.filledDetails
         });
       } catch {
         res.status(404).send({ message: 'User Doesnot Exist' });
