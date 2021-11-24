@@ -33,11 +33,20 @@ Server will run locally.
    * models - This folder contains <b>accountModel.js</b> and <b>userModel.js</b> files which have schema designs for user bequest and user info.
         
         #### accountModel.js
-        * <b>fromLang</b> - The language of text that you have to translate. 
-        * <b>toLang</b> - The language in which text is to be translated.
-        * <b>fromText</b> - The text you have to translate.
-        * <b>toText</b> - The translated text.
+        * <b>userid</b> - User's ID 
+        * <b>token</b> - Encrypted string of JWT token
+        * <b>timestamps</b> - Time at which user stores secret message
 
         #### userModel.js
-   * keys.js - This file contains database url which is used for connecting server to database.
+        * <b>name</b> - User's name 
+        * <b>email</b> - User's E-mail
+        * <b>phone</b> - User's Phone Number 
+        * <b>password</b> - User's password
+        * <b>lastlogins</b> - Time at which user logs in
+        * <b>filledDetails</b> - Flag which checks if user has stored his secret 
+        * <b>mailsent</b> - Flag which checks if mail has been sent to remind user to login
+        * <b>nominee1</b> - Nominee with whom user wants to share his secret message 
+        * <b>nominee2</b> - Nominee with whom user wants to share his secret message
+        * <b>nominee3</b> - Nominee with whom user wants to share his secret message
+   * utils.js - This file contains middlewares for user authentication and generating jwt token
 
