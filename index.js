@@ -44,14 +44,14 @@ app.listen(process.env.PORT||5000,async()=>{
                   requireTLS: true,
                   auth: {
                       user: `${process.env.MAIL}`,
-                      pass: `${process.env.PASS}`
+                      pass: `${process.env.PASSWORD}`
                   }
               });
                 var mailOptions = {
-                    from: 'abhinavvpathakk@gmail.com',
+                    from: `${process.env.MAIL}`,
                     to: users[i].email,
                     subject: 'Login inactivity',
-                    text: 'Please kogin!'
+                    text: 'Please login!'
                   };
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
