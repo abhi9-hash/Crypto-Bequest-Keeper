@@ -43,7 +43,7 @@ app.listen(process.env.PORT||5000,async()=>{
                   secure: false,
                   requireTLS: true,
                   auth: {
-                      user: 'abhinavvpathakk@gmail.com',
+                      user: `${process.env.MAIL}`,
                       pass: `${process.env.PASS}`
                   }
               });
