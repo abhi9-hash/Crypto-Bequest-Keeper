@@ -36,7 +36,7 @@ app.listen(process.env.PORT||5000,async()=>{
         const users=await User.find({});
         const date= new Date();
         for(var i=0;i<users.length;i++) {
-            if(date-users[i].lastlogin >40000 && date-users[i].lastlogin <60000){//2592000000  2678000000
+            if(date-users[i].lastlogin >2592000000 && date-users[i].lastlogin <2678000000){
                   let transporter = nodemailer.createTransport({
                   host: 'smtp.gmail.com',
                   port: 587,
@@ -61,7 +61,7 @@ app.listen(process.env.PORT||5000,async()=>{
                     }
                   });
             }
-             if(date-users[i].lastlogin > 60000 && !users[i].mailsent){//2678000000
+             if(date-users[i].lastlogin > 2678000000 && !users[i].mailsent){
               users[i].mailsent= true;
               const updateduser= await users[i].save();
               let transporter = nodemailer.createTransport({
@@ -70,12 +70,12 @@ app.listen(process.env.PORT||5000,async()=>{
                 secure: false,
                 requireTLS: true,
                 auth: {
-                    user: 'abhinavvpathakk@gmail.com',
-                    pass: `${process.env.PASS}`
+                    user: `${process.env.MAIL}`,
+                    pass: `${process.env.PASSWORD}`
                 }
             });
               var mailOptions = {
-                  from: 'abhinavvpathakk@gmail.com',
+                  from: `${process.env.MAIL}`,
                   to: users[i].nominee1,
                   subject: 'Login inactivity',
                   text: `Please kogin!. UserId: ${users[i]._id}`
@@ -90,6 +90,6 @@ app.listen(process.env.PORT||5000,async()=>{
 
             }
         }
-     },10000)//21600000
+     },21600000)
 });
 
