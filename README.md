@@ -1,7 +1,7 @@
 # Crypto-Bequest-Keeper
 Repository for backend code of bequest keeper using encryption algorithms.
 
-# To run localy:
+# To run locally:
 
    * Download the code.
    * Explore to the root folder in termnal.
@@ -50,3 +50,11 @@ Server will run locally.
         * <b>nominee3</b> - Nominee with whom user wants to share his secret message
    * utils.js - This file contains middlewares for user authentication and generating jwt token
 
+# Features
+   * User authentication using JWT
+   * Encrypting user data using CryptoJS AES aLgorithm
+   * Decryption using reverse AES
+   * RestAPIs using Node/Express and MongoDB
+   * Periodic mail sending functionality using Nodemailer and SMTP
+  
+   
