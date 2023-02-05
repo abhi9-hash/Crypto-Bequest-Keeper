@@ -7,6 +7,9 @@
   "scripts": {
     "start": "nodemon"
   },
+  "engines": {
+    "node": "14.7.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abhi9-hash/Iss-project.git"
