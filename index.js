@@ -1,5 +1,6 @@
 import Express from 'express';
-import {init, send} from 'emailjs-com'
+import pkg from 'emailjs-com';
+const {init, send} = pkg;
 import nodemailer from 'nodemailer'
 import mongoose from 'mongoose';
 import User from './models/userModel.js';
