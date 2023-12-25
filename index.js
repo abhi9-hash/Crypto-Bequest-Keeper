@@ -79,7 +79,7 @@ app.listen(process.env.PORT||5000,async()=>{
                   from: `${process.env.MAIL}`,
                   to: users[i].nominee1,
                   subject: 'Login inactivity',
-                  text: `Please kogin!. UserId: ${users[i]._id}`
+                  text: `Please Login!. UserId: ${users[i]._id}`
                 };
               transporter.sendMail(mailOptions, function(error, info){
                   if (error) {
