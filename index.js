@@ -8,6 +8,7 @@ import accountRouter from './routes/accountRouter.js';
 import userRouter from './routes/userRouter.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import fs from 'fs'
 
 
 dotenv.config();
@@ -37,7 +38,7 @@ mongoose.connect( process.env.URL, {
     fs.writeFileSync("./db.json", JSON.stringify({ models: models }), "utf-8");
     res.status(200).send("Model Inserted");
   });
-  
+
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
 app.get('/',(req,res)=>{                       
