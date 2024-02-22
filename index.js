@@ -23,22 +23,6 @@ mongoose.connect( process.env.URL, {
   }).then(()=>console.log('DB Connected'))
   .catch((err)=>console.log(err));
 
-  app.get("/models", async (req, res, next) => {
-    const data = fs.readFileSync("./db.json", "utf-8");
-    const models = JSON.parse(data).models;
-    res.status(200).send(models);
-  });
-  
-  app.post("/models/create", async (req, res, next) => {
-    const data = fs.readFileSync("./db.json", "utf-8");
-    const models = JSON.parse(data).models;
-    const model = req.body;
-    model["id"] = new Date();
-    models.push(model);
-    fs.writeFileSync("./db.json", JSON.stringify({ models: models }), "utf-8");
-    res.status(200).send("Model Inserted");
-  });
-
 app.use('/users', userRouter);
 app.use('/account', accountRouter);
 app.get('/',(req,res)=>{                       
